@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, ShieldCheck } from "lucide-react";
@@ -10,6 +10,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 const PLAN_PRICE = "39EUR/mois";
 
 export default function AbonnementPage() {
+  return (
+    <Suspense fallback={<AbonnementPageFallback />}>
+      <AbonnementPageContent />
+    </Suspense>
+  );
+}
+
+function AbonnementPageContent() {
   const searchParams = useSearchParams();
   const [isConfirmed, setIsConfirmed] = useState(false);
   const targetModule = searchParams.get("module") ?? "Ce module";
@@ -74,6 +82,24 @@ export default function AbonnementPage() {
           </div>
         </CardContent>
       </Card>
+    </section>
+  );
+}
+
+function AbonnementPageFallback() {
+  return (
+    <section className="mx-auto w-full max-w-3xl space-y-4">
+      <header className="glass-panel rounded-2xl border p-5">
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-[color:var(--muted)]">
+          Checkout mock
+        </p>
+        <h1 className="font-display mt-2 text-2xl text-[color:var(--foreground)] md:text-3xl">
+          Abonnement Valometrix
+        </h1>
+        <p className="mt-2 text-sm text-[color:var(--muted)]">
+          Chargement du module...
+        </p>
+      </header>
     </section>
   );
 }
